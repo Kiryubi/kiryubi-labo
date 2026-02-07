@@ -1,0 +1,7 @@
+node_modules
+dist
+assets
+legacy_backup
+.env
+.vscode
+.DS_Store

@@ -1,0 +1,319 @@
+:root {
+    --bg-color: #030303;
+    --text-primary: #e0ffee;
+    /* Pale cyber green */
+    --text-dim: #005500;
+
+    --neon-green: #00ff41;
+    --neon-cyan: #00f3ff;
+    --neon-pink: #ff0055;
+    --danger-red: #ff3333;
+
+    --hud-bg: rgba(0, 10, 0, 0.6);
+    --hud-border: rgba(0, 255, 65, 0.3);
+
+    --font-stack: 'VT323', 'Courier New', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    font-size: 18px;
+    line-height: 1.5;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* BASE SCROLLBAR (Slim Tech) */
+::-webkit-scrollbar {
+    width: 4px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-cyan);
+    border-radius: 2px;
+}
+
+#root {
+    height: 100%;
+}
+
+/* ATMOSPHERE LAYER (Cyber Mist) */
+.fog-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 120%, rgba(0, 255, 65, 0.1), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+    animation: mist-pulse 8s infinite ease-in-out;
+}
+
+@keyframes mist-pulse {
+
+    0%,
+    100% {
+        opacity: 0.3;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* MAIN LAYOUT - FLOATING MODULES */
+.app-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr 280px;
+    height: 100vh;
+    padding: 15px;
+    gap: 20px;
+    background: radial-gradient(circle at center, #051005 0%, #000000 80%);
+    position: relative;
+    z-index: 1;
+}
+
+/* HUD PANEL (The Glass Tech) */
+.hud-panel {
+    background: var(--hud-bg);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--hud-border);
+    padding: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+
+    /* Angled Sci-Fi Corners */
+    clip-path: polygon(10px 0, 100% 0,
+            100% calc(100% - 10px),
+            calc(100% - 10px) 100%,
+            0 100%,
+            0 10px);
+
+    /* Inner glow */
+    box-shadow: inset 0 0 20px rgba(0, 50, 0, 0.2);
+}
+
+/* Hover effect on panels to make them feel "Active" */
+.hud-panel:hover {
+    border-color: var(--neon-cyan);
+    box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.1);
+}
+
+/* SIDEBAR & LOGO */
+.logo-ascii {
+    font-size: 8px;
+    line-height: 8px;
+    color: var(--neon-green);
+    text-shadow: 0 0 5px var(--neon-green);
+    font-weight: bold;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+
+    /* REQUESTED: Constant Nervous Jitter */
+    animation: jitter-glitch 2s infinite alternate;
+}
+
+@keyframes jitter-glitch {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    90% {
+        transform: translate(0, 0);
+    }
+
+    92% {
+        transform: translate(1px, 0);
+        opacity: 0.8;
+    }
+
+    94% {
+        transform: translate(-1px, 1px);
+        opacity: 1;
+    }
+
+    96% {
+        transform: translate(0, -1px);
+    }
+
+    98% {
+        transform: translate(1px, 0);
+    }
+
+    100% {
+        transform: translate(0, 0);
+        opacity: 0.9;
+    }
+}
+
+/* NAVIGATION LINKS - AGGRESSIVE */
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nav-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--neon-green);
+    text-transform: uppercase;
+    border-left: 2px solid var(--hud-border);
+    background: linear-gradient(90deg, transparent, transparent);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+/* MOUSE OVER EFFECTS (The 95% Cyberpunk Request) */
+.nav-item:hover {
+    background: var(--neon-green);
+    /* Invert Logic */
+    color: #000;
+    /* Black Text */
+    font-weight: bold;
+    padding-left: 25px;
+    /* Snap movement */
+    border-left: 5px solid var(--danger-red);
+    /* Danger Bar */
+    box-shadow:
+        0 0 15px var(--neon-green),
+        inset 0 0 5px #000;
+    clip-path: polygon(0 0, 95% 0, 100% 50%, 95% 100%, 0 100%);
+}
+
+.nav-item::before {
+    content: "[_]";
+    margin-right: 10px;
+    opacity: 0.5;
+    font-size: 0.8em;
+}
+
+.nav-item:hover::before {
+    content: "[!]";
+    color: var(--danger-red);
+    font-weight: 800;
+}
+
+/* POST LIST */
+.list-header {
+    color: var(--neon-cyan);
+    border-bottom: 1px solid var(--neon-cyan);
+    margin: 1.5rem 0 1rem 0;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    opacity: 0.8;
+}
+
+.post-item {
+    display: flex;
+    gap: 10px;
+    padding: 6px 0;
+    border-bottom: 1px dashed var(--text-dim);
+    opacity: 0.7;
+    transition: 0.2s;
+}
+
+.post-item:hover {
+    opacity: 1;
+    color: var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
+    transform: translateX(5px);
+}
+
+.post-item .date {
+    color: var(--text-dim);
+    font-size: 0.8em;
+}
+
+/* CONTENT AREA */
+.markdown-content h1 {
+    font-size: 2.2rem;
+    color: var(--neon-cyan);
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--neon-cyan);
+    padding-left: 15px;
+    line-height: 1;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+.markdown-content p {
+    margin-bottom: 1.2rem;
+    opacity: 0.9;
+}
+
+.markdown-content code {
+    color: var(--neon-pink);
+    background: rgba(255, 0, 85, 0.1);
+    border: 1px solid var(--neon-pink);
+    padding: 2px 6px;
+    font-size: 0.9em;
+}
+
+/* RIGHT COLUMN - DATA */
+.related {
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.status-block {
+    border: 1px solid var(--danger-red);
+    background: rgba(255, 51, 51, 0.05);
+    padding: 10px;
+    margin-bottom: 15px;
+    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+}
+
+.status-block pre {
+    color: var(--danger-red);
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .app-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .mobile-hidden {
+        display: none;
+    }
+
+    .hud-panel {
+        clip-path: none;
+        border: 1px solid var(--hud-border);
+    }
+}
+
+/* Subtle Grid Background (The Void) */
+.app-grid::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(0, 50, 0, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 50, 0, 0.1) 1px, transparent 1px);
+    background-size: 40px 40px;
+    z-index: -1;
+    pointer-events: none;
+}
