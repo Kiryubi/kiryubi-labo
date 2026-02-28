@@ -7,7 +7,7 @@ import MatrixRain from './components/MatrixRain'
 // Helper to filter posts based on current route
 const getFilteredPosts = (allPosts, path) => {
     if (path === '/games') return allPosts.filter(p => p.category === 'game');
-    if (path === '/tec') return allPosts.filter(p => p.category === 'tech' || p.category === 'idea');
+    if (path === '/jornal') return allPosts.filter(p => p.category === 'jornal');
     if (path === '/ciencia') return allPosts.filter(p => p.category === 'science' || p.category === 'log' || p.category === 'unknown');
     return allPosts; // Default: show all
 };
@@ -15,6 +15,12 @@ const getFilteredPosts = (allPosts, path) => {
 const Sidebar = ({ posts }) => {
     const location = useLocation();
     const filteredPosts = getFilteredPosts(posts, location.pathname);
+
+    // Get dynamic sub-menu for Jornal
+    const jornalPosts = posts.filter(p => p.category === 'jornal').sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Handle submenu toggle state based on route
+    const isJornalActive = location.pathname.startsWith('/jornal') || location.pathname.startsWith('/post/jornal');
 
     return (
         <aside className="col sidebar hud-panel">
@@ -34,7 +40,18 @@ const Sidebar = ({ posts }) => {
             </header>
             <nav>
                 <Link to="/" className="nav-item">/MAIN_SYSTEM</Link>
-                <Link to="/tec" className="nav-item">/TEC</Link>
+                <div className="nav-group">
+                    <Link to="/jornal" className="nav-item">/JORNAL_DIÁRIO</Link>
+                    {(isJornalActive || location.pathname === '/') && jornalPosts.length > 0 && (
+                        <div className="submenu">
+                            {jornalPosts.map(p => (
+                                <Link key={p.slug} to={`/post/${p.slug}`} className="submenu-item">
+                                    {`└── [${p.date ? p.date.substring(0, 10).split('-').reverse().join('/') : '????'}]`}
+                                </Link>
+                            ))}
+                        </div>
+                    )}
+                </div>
                 <Link to="/games" className="nav-item">/GAMES</Link>
                 <Link to="/ciencia" className="nav-item">/CIENCIA</Link>
             </nav>
@@ -76,7 +93,7 @@ const Related = () => (
 const CategoryView = ({ posts, category }) => {
     const filtered = posts.filter(p => {
         if (category === 'science') return p.category === 'science' || p.category === 'log' || p.category === 'unknown';
-        if (category === 'tech') return p.category === 'tech' || p.category === 'idea';
+        if (category === 'jornal') return p.category === 'jornal';
         return p.category === category;
     });
     return (
@@ -132,7 +149,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<PostViewer posts={posts} />} />
                     <Route path="/games" element={<CategoryView posts={posts} category="game" />} />
-                    <Route path="/tec" element={<CategoryView posts={posts} category="tech" />} />
+                    <Route path="/jornal" element={<CategoryView posts={posts} category="jornal" />} />
                     <Route path="/ciencia" element={<CategoryView posts={posts} category="science" />} />
                     <Route path="/post/:slug" element={<PostViewer posts={posts} />} />
                     <Route path="*" element={<div><h1>404</h1></div>} />

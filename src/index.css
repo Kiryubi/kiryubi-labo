@@ -210,6 +210,39 @@ nav {
     font-weight: 800;
 }
 
+/* SUBMENU (JORNAL DIÁRIO) */
+.nav-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.submenu {
+    display: flex;
+    flex-direction: column;
+    padding-left: 15px;
+    border-left: 1px dashed var(--neon-cyan);
+    margin-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    gap: 5px;
+}
+
+.submenu-item {
+    font-size: 0.9rem;
+    color: var(--neon-cyan);
+    text-decoration: none;
+    opacity: 0.7;
+    transition: 0.2s;
+    padding: 2px 0;
+}
+
+.submenu-item:hover {
+    opacity: 1;
+    color: var(--neon-pink);
+    text-shadow: 0 0 5px var(--neon-pink);
+    transform: translateX(5px);
+}
+
 /* POST LIST */
 .list-header {
     color: var(--neon-cyan);
