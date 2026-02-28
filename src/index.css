@@ -108,6 +108,7 @@ body {
 
 .main-content {
     overflow-y: auto;
+    min-height: 0;
 }
 
 /* Hover effect on panels to make them feel "Active" */

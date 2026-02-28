@@ -30,15 +30,15 @@ export function usePosts() {
                         const metadata = fmMatch[1];
                         content = fmMatch[2];
 
-                        // Extract keys
+                        // Extract keys and strip quotes
                         const titleMatch = metadata.match(/title:\s*(.*)/);
-                        if (titleMatch) title = titleMatch[1].trim();
+                        if (titleMatch) title = titleMatch[1].trim().replace(/^["']|["']$/g, '');
 
                         const dateMatch = metadata.match(/date:\s*(.*)/);
-                        if (dateMatch) date = dateMatch[1].trim();
+                        if (dateMatch) date = dateMatch[1].trim().replace(/^["']|["']$/g, '');
 
                         const categoryMatch = metadata.match(/category:\s*(.*)/);
-                        if (categoryMatch) category = categoryMatch[1].trim().toLowerCase();
+                        if (categoryMatch) category = categoryMatch[1].trim().toLowerCase().replace(/^["']|["']$/g, '');
                     } else {
                         // Fallback: try to find first H1
                         const h1Match = raw.match(/^#\s+(.*)/m);
