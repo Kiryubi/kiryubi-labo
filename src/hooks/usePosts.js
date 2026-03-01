@@ -48,12 +48,19 @@ export function usePosts() {
                     // Extract filename slug
                     const slug = path.split('/').pop();
 
+                    // Generate a simple excerpt by stripping markdown hashes and newlines
+                    let excerpt = content.replace(/#+\s/g, '').replace(/[\r\n]+/g, ' ').trim();
+                    if (excerpt.length > 140) {
+                        excerpt = excerpt.substring(0, 140) + '...';
+                    }
+
                     parsedPosts.push({
                         slug,
                         title,
                         date,
                         category,
-                        content
+                        content,
+                        excerpt
                     });
                 }
 

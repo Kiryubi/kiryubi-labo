@@ -102,16 +102,20 @@ const CategoryView = ({ posts, category }) => {
         <div className="markdown-content">
             <h1>/INDEX: {category.toUpperCase()}</h1>
             {filtered.length === 0 ? <p>No files found.</p> : (
-                <ul style={{ listStyle: 'none' }}>
+                <div className="post-grid">
                     {filtered.map(p => (
-                        <li key={p.slug} style={{ marginBottom: '1rem', borderBottom: '1px dashed #333', paddingBottom: '10px' }}>
-                            <Link to={`/post/${p.slug}`} style={{ color: 'var(--neon-green)', textDecoration: 'none', fontSize: '1.2rem' }}>
-                                {'>'} {p.title}
+                        <div key={p.slug} className="post-card">
+                            <div className="card-tag">
+                                {p.category === 'jornal' ? 'IA' : (p.category === 'science' ? 'CIÊNCIA' : p.category.toUpperCase())}
+                            </div>
+                            <h2 className="card-title">{p.title}</h2>
+                            <p className="card-excerpt">{p.excerpt}</p>
+                            <Link to={`/post/${p.slug}`} className="card-link">
+                                Explorar relatório &rarr;
                             </Link>
-                            <div style={{ color: '#666', fontSize: '0.8rem' }}>{p.date}</div>
-                        </li>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

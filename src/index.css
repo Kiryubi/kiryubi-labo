@@ -282,6 +282,73 @@ nav {
     font-size: 0.8em;
 }
 
+/* POST GRID (Category View) */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.post-card {
+    background: #111;
+    border: 1px solid #222;
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.post-card:hover {
+    transform: translateY(-5px);
+    border-color: #444;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.card-tag {
+    align-self: flex-start;
+    background: #222;
+    color: #aaa;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+}
+
+.card-title {
+    font-size: 1.4rem;
+    color: #eee;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    /* Matching the clean look of reference */
+}
+
+.card-excerpt {
+    font-size: 0.95rem;
+    color: #999;
+    line-height: 1.5;
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.card-link {
+    font-size: 0.9rem;
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+    font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.card-link:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
 /* CONTENT AREA */
 .markdown-content {
     padding: 0 1.5rem;
