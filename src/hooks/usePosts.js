@@ -21,6 +21,7 @@ export function usePosts() {
                     let title = path.split('/').pop().replace('.md', ''); // default
                     let date = 'unknown';
                     let category = 'log'; // default category
+                    let topic = ''; // default topic
                     let content = raw;
 
                     // Robust Regex for Frontmatter (handles \n and \r\n)
@@ -39,6 +40,9 @@ export function usePosts() {
 
                         const categoryMatch = metadata.match(/category:\s*(.*)/);
                         if (categoryMatch) category = categoryMatch[1].trim().toLowerCase().replace(/^["']|["']$/g, '');
+
+                        const topicMatch = metadata.match(/topic:\s*(.*)/);
+                        if (topicMatch) topic = topicMatch[1].trim().replace(/^["']|["']$/g, '');
                     } else {
                         // Fallback: try to find first H1
                         const h1Match = raw.match(/^#\s+(.*)/m);
@@ -60,7 +64,8 @@ export function usePosts() {
                         date,
                         category,
                         content,
-                        excerpt
+                        excerpt,
+                        topic
                     });
                 }
 

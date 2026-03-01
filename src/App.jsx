@@ -106,7 +106,7 @@ const CategoryView = ({ posts, category }) => {
                     {filtered.map(p => (
                         <div key={p.slug} className="post-card">
                             <div className="card-tag">
-                                {p.category === 'jornal' ? 'IA' : (p.category === 'science' ? 'CIÊNCIA' : p.category.toUpperCase())}
+                                {p.topic ? p.topic.toUpperCase() : 'LOG'}
                             </div>
                             <h2 className="card-title">{p.title}</h2>
                             <p className="card-excerpt">{p.excerpt}</p>
