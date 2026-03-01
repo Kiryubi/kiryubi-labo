@@ -27,8 +27,8 @@ body {
     font-family: var(--font-stack);
     font-size: 18px;
     line-height: 1.5;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    background-attachment: fixed;
 }
 
 /* BASE SCROLLBAR (Slim Tech) */
@@ -46,9 +46,7 @@ body {
 }
 
 #root {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* ATMOSPHERE LAYER (Cyber Mist) */
@@ -80,13 +78,12 @@ body {
 .app-grid {
     display: grid;
     grid-template-columns: 260px 1fr 280px;
-    height: 100%;
-    flex: 1;
+    height: 100vh;
+    /* Desktop locks to viewport height */
     overflow: hidden;
-    /* Prevent grid escaping root */
+    /* Desktop body doesn't bounce */
     padding: 15px;
     gap: 20px;
-    background: radial-gradient(circle at center, #051005 0%, #000000 80%);
     position: relative;
     z-index: 1;
 }
@@ -98,9 +95,13 @@ body {
     border: 1px solid var(--hud-border);
     position: relative;
     transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
     padding: 1.5rem;
+    overflow-y: auto;
+    /* Independent scroll for EVERY panel on desktop */
+    height: 100%;
+    max-height: 100%;
+    min-height: 0;
+
 
     /* Angled Sci-Fi Corners */
     clip-path: polygon(10px 0, 100% 0,
@@ -111,15 +112,6 @@ body {
 
     /* Inner glow */
     box-shadow: inset 0 0 20px rgba(0, 50, 0, 0.2);
-}
-
-.main-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    overflow: hidden;
-    padding: 1.5rem 0;
 }
 
 /* Hover effect on panels to make them feel "Active" */
@@ -292,11 +284,7 @@ nav {
 
 /* CONTENT AREA */
 .markdown-content {
-    flex: 1;
-    overflow-y: auto;
     padding: 0 1.5rem;
-    /* Re-add inner padding for the scroll text */
-    min-height: 0;
 }
 
 .markdown-content h1 {
@@ -345,9 +333,20 @@ nav {
 @media (max-width: 900px) {
     .app-grid {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr;
-        gap: 10px;
+        height: auto;
+        /* Release height constraint for native mobile scrolling */
+        overflow: visible;
+        gap: 15px;
         padding: 10px;
+    }
+
+    .hud-panel {
+        height: auto;
+        /* Panels expand fully */
+        max-height: none;
+        overflow-y: visible;
+        /* Let the body scroll the page natively */
+        clip-path: none;
     }
 
     .mobile-hidden {
