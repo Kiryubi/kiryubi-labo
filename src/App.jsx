@@ -63,7 +63,9 @@ const Sidebar = ({ posts }) => {
                 {filteredPosts.length > 0 ? filteredPosts.map(p => (
                     <Link key={p.slug} to={`/post/${p.slug}`} className="post-item">
                         <span className="date">[{p.date ? p.date.substring(0, 10) : '????'}]</span>
-                        <span className="title">{p.title}</span>
+                        <span className="title" title={p.title}>
+                            {p.title && p.title.length > 22 ? `${p.title.substring(0, 22)}...` : p.title}
+                        </span>
                     </Link>
                 )) : <div style={{ opacity: 0.5 }}>{'<NO_DATA>'}</div>}
             </div>
