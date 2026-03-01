@@ -108,16 +108,14 @@ const PostCardGrid = ({ posts, header }) => (
         {posts.length === 0 ? <p>No files found.</p> : (
             <div className="post-grid">
                 {posts.map(p => (
-                    <div key={p.slug} className="post-card">
+                    <Link key={p.slug} to={`/post/${p.slug}`} className="post-card" style={{ textDecoration: 'none' }}>
                         <div className="card-tag">
                             {p.topic ? p.topic.toUpperCase() : 'LOG'}
                         </div>
                         <h2 className="card-title">{p.title}</h2>
                         <p className="card-excerpt">{p.excerpt}</p>
-                        <a href={p.original_url || '#'} target="_blank" rel="noopener noreferrer" className="card-link">
-                            Ver fonte original →
-                        </a>
-                    </div>
+                        <span className="card-link">Ler notícia completa →</span>
+                    </Link>
                 ))}
             </div>
         )}
