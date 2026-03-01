@@ -1,26 +1,36 @@
 import { useState, useEffect } from 'react'
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Routes, Route, Link, useLocation, useParams } from 'react-router-dom'
 import ReactMarkdown from 'react-markdown'
 import { usePosts } from './hooks/usePosts'
 import MatrixRain from './components/MatrixRain'
 
-// Helper to filter posts based on current route
+// Format a YYYY-MM-DD string to DD/MM/YYYY (Brazilian format)
+const toBRDate = (isoDate) => {
+    if (!isoDate) return '????';
+    const parts = isoDate.substring(0, 10).split('-');
+    if (parts.length !== 3) return isoDate;
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+};
+
+// Helper to filter posts for sidebar based on current route
 const getFilteredPosts = (allPosts, path) => {
     if (path === '/games') return allPosts.filter(p => p.category === 'game');
-    if (path === '/jornal') return allPosts.filter(p => p.category === 'jornal');
+    if (path.startsWith('/jornal')) return allPosts.filter(p => p.category === 'noticia');
     if (path === '/ciencia') return allPosts.filter(p => p.category === 'science' || p.category === 'log' || p.category === 'unknown');
-    return allPosts; // Default: show all
+    return allPosts;
 };
 
 const Sidebar = ({ posts }) => {
     const location = useLocation();
     const filteredPosts = getFilteredPosts(posts, location.pathname);
 
-    // Get dynamic sub-menu for Jornal
-    const jornalPosts = posts.filter(p => p.category === 'jornal').sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Get unique sorted dates from 'noticia' posts for the Jornal submenu
+    const noticiasPosts = posts.filter(p => p.category === 'noticia');
+    const uniqueDates = [...new Set(
+        noticiasPosts.map(p => p.date ? p.date.substring(0, 10) : null).filter(Boolean)
+    )].sort((a, b) => (a > b ? -1 : 1)); // Descending
 
-    // Handle submenu toggle state based on route
-    const isJornalActive = location.pathname.startsWith('/jornal') || location.pathname.startsWith('/post/jornal');
+    const isJornalActive = location.pathname.startsWith('/jornal');
 
     return (
         <aside className="col sidebar hud-panel">
@@ -42,11 +52,11 @@ const Sidebar = ({ posts }) => {
                 <Link to="/" className="nav-item">/MAIN_SYSTEM</Link>
                 <div className="nav-group">
                     <Link to="/jornal" className="nav-item">/JORNAL_DIÁRIO</Link>
-                    {(isJornalActive || location.pathname === '/') && jornalPosts.length > 0 && (
+                    {(isJornalActive || location.pathname === '/') && uniqueDates.length > 0 && (
                         <div className="submenu">
-                            {jornalPosts.map(p => (
-                                <Link key={p.slug} to={`/post/${p.slug}`} className="submenu-item">
-                                    {`└── [${p.date ? p.date.substring(0, 10).split('-').reverse().join('/') : '????'}]`}
+                            {uniqueDates.map(date => (
+                                <Link key={date} to={`/jornal/${date}`} className="submenu-item">
+                                    {`└── [${toBRDate(date)}]`}
                                 </Link>
                             ))}
                         </div>
@@ -58,11 +68,11 @@ const Sidebar = ({ posts }) => {
             <div className="post-list">
                 <div className="list-header">
                     {location.pathname === '/' ? 'ALL_FILES:' :
-                        location.pathname.toUpperCase().substring(1) + '_FILES:'}
+                        location.pathname.toUpperCase().substring(1).replace(/\//g, '_') + '_FILES:'}
                 </div>
                 {filteredPosts.length > 0 ? filteredPosts.map(p => (
                     <Link key={p.slug} to={`/post/${p.slug}`} className="post-item">
-                        <span className="date">[{p.date ? p.date.substring(0, 10) : '????'}]</span>
+                        <span className="date">[{toBRDate(p.date)}]</span>
                         <span className="title" title={p.title}>
                             {p.title && p.title.length > 22 ? `${p.title.substring(0, 22)}...` : p.title}
                         </span>
@@ -91,34 +101,56 @@ const Related = () => (
     </aside>
 )
 
-// List View for Category Pages
+// Card Grid renderer — shared between CategoryView and JornalDayView
+const PostCardGrid = ({ posts, header }) => (
+    <div className="markdown-content">
+        <h1>{header}</h1>
+        {posts.length === 0 ? <p>No files found.</p> : (
+            <div className="post-grid">
+                {posts.map(p => (
+                    <div key={p.slug} className="post-card">
+                        <div className="card-tag">
+                            {p.topic ? p.topic.toUpperCase() : 'LOG'}
+                        </div>
+                        <h2 className="card-title">{p.title}</h2>
+                        <p className="card-excerpt">{p.excerpt}</p>
+                        <a href={p.original_url || '#'} target="_blank" rel="noopener noreferrer" className="card-link">
+                            Ver fonte original →
+                        </a>
+                    </div>
+                ))}
+            </div>
+        )}
+    </div>
+);
+
+// Day View: cards for all posts on a specific date
+const JornalDayView = ({ posts }) => {
+    const { date } = useParams(); // YYYY-MM-DD from URL
+    const dayPosts = posts
+        .filter(p => p.category === 'noticia' && p.date && p.date.substring(0, 10) === date)
+        .sort((a, b) => a.title > b.title ? 1 : -1);
+
+    return (
+        <PostCardGrid
+            posts={dayPosts}
+            header={`/JORNAL: ${toBRDate(date)}`}
+        />
+    );
+};
+
+// General Category List View (for /jornal index, /games, /ciencia)
 const CategoryView = ({ posts, category }) => {
     const filtered = posts.filter(p => {
         if (category === 'science') return p.category === 'science' || p.category === 'log' || p.category === 'unknown';
-        if (category === 'jornal') return p.category === 'jornal';
+        if (category === 'jornal') return p.category === 'noticia';
         return p.category === category;
     });
-    return (
-        <div className="markdown-content">
-            <h1>/INDEX: {category.toUpperCase()}</h1>
-            {filtered.length === 0 ? <p>No files found.</p> : (
-                <div className="post-grid">
-                    {filtered.map(p => (
-                        <div key={p.slug} className="post-card">
-                            <div className="card-tag">
-                                {p.topic ? p.topic.toUpperCase() : 'LOG'}
-                            </div>
-                            <h2 className="card-title">{p.title}</h2>
-                            <p className="card-excerpt">{p.excerpt}</p>
-                            <Link to={`/post/${p.slug}`} className="card-link">
-                                Explorar relatório &rarr;
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-            )}
-        </div>
-    );
+
+    // For jornal, group by date and show latest date's posts by default
+    const header = category === 'jornal' ? '/INDEX: JORNAL DIÁRIO' : `/INDEX: ${category.toUpperCase()}`;
+
+    return <PostCardGrid posts={filtered} header={header} />;
 };
 
 const PostViewer = ({ posts }) => {
@@ -126,9 +158,7 @@ const PostViewer = ({ posts }) => {
     const slug = pathname.split('/').pop();
     const decodedSlug = decodeURIComponent(slug);
 
-    // If root, show welcome.md
     const targetSlug = pathname === '/' ? 'welcome.md' : decodedSlug;
-
     const post = posts.find(p => p.slug === targetSlug);
 
     if (!post) return <div><h1>404</h1><p>File not found in sector.</p></div>
@@ -156,6 +186,7 @@ function App() {
                     <Route path="/" element={<PostViewer posts={posts} />} />
                     <Route path="/games" element={<CategoryView posts={posts} category="game" />} />
                     <Route path="/jornal" element={<CategoryView posts={posts} category="jornal" />} />
+                    <Route path="/jornal/:date" element={<JornalDayView posts={posts} />} />
                     <Route path="/ciencia" element={<CategoryView posts={posts} category="science" />} />
                     <Route path="/post/:slug" element={<PostViewer posts={posts} />} />
                     <Route path="*" element={<div><h1>404</h1></div>} />
