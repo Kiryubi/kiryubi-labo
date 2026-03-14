@@ -48,7 +48,7 @@ const Sidebar = ({ posts }) => {
                         className="nav-item"
                         onClick={() => setJornalOpen(o => !o)}
                     >
-                        /JORNAL_DIÁRIO {jornalOpen ? '▲' : '▼'}
+                        /JORNAL_DIÁRIO
                     </Link>
                     {jornalOpen && uniqueDates.length > 0 && (
                         <div className="submenu">

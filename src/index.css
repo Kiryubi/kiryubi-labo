@@ -242,6 +242,7 @@ nav {
 }
 
 .submenu-item {
+    display: block;
     font-size: 0.9rem;
     color: var(--neon-cyan);
     text-decoration: none;
@@ -488,7 +489,8 @@ nav {
 
     /* Show submenu on mobile — user needs to see the dates */
     .submenu {
-        display: block;
+        display: flex;
+        flex-direction: column;
         padding-left: 0.5rem;
     }
 
