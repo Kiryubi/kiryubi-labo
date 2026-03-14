@@ -441,38 +441,44 @@ nav {
     .app-grid {
         grid-template-columns: 1fr;
         height: auto;
-        overflow: visible;
+        overflow-x: hidden;
+        /* Prevent horizontal overflow that cuts content */
+        overflow-y: visible;
         gap: 10px;
         padding: 8px;
+        width: 100%;
     }
 
     .hud-panel {
         height: auto;
         max-height: none;
         overflow-y: visible;
+        overflow-x: hidden;
         clip-path: none;
         border: 1px solid var(--hud-border);
+        width: 100%;
+        box-sizing: border-box;
     }
 
-    /* Collapse sidebar into a compact nav bar on mobile */
+    /* Compact sidebar on mobile — vertical nav preserved so submenu works */
     .sidebar {
         padding: 0.8rem;
     }
 
     .ascii-header {
         display: none;
-        /* Hide the large ASCII logo on mobile */
+        /* Hide large ASCII logo on mobile */
     }
 
     nav {
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
+        /* Keep vertical so submenu items appear below */
         gap: 4px;
     }
 
     .nav-item {
-        font-size: 0.85rem;
-        padding: 6px 10px;
+        font-size: 0.9rem;
+        padding: 7px 10px;
         letter-spacing: 1px;
     }
 
@@ -480,9 +486,15 @@ nav {
         display: none;
     }
 
+    /* Show submenu on mobile — user needs to see the dates */
     .submenu {
-        display: none;
-        /* Hide submenus on mobile to save space */
+        display: block;
+        padding-left: 0.5rem;
+    }
+
+    .submenu-item {
+        font-size: 0.85rem;
+        padding: 4px 8px;
     }
 
     .mobile-hidden {
@@ -492,14 +504,34 @@ nav {
     /* Card grid single column on mobile */
     .post-grid {
         grid-template-columns: 1fr;
+        gap: 0.8rem;
+    }
+
+    .post-card {
+        clip-path: none;
+        /* Remove clip-path that can cause overflow on small screens */
     }
 
     .markdown-content {
         padding: 0 0.5rem;
+        overflow-x: hidden;
+        word-break: break-word;
     }
 
     .markdown-content h1 {
         font-size: 1.4rem;
+    }
+
+    /* Prevent any element from exceeding screen width */
+    * {
+        max-width: 100%;
+    }
+
+    pre,
+    code {
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
     }
 }
 
