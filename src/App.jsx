@@ -14,14 +14,15 @@ const toBRDate = (isoDate) => {
 
 const Sidebar = ({ posts }) => {
     const location = useLocation();
+    const [jornalOpen, setJornalOpen] = useState(
+        location.pathname.startsWith('/jornal')
+    );
 
     // Get unique sorted dates from 'noticia' posts for the Jornal submenu
     const noticiasPosts = posts.filter(p => p.category === 'noticia');
     const uniqueDates = [...new Set(
         noticiasPosts.map(p => p.date ? p.date.substring(0, 10) : null).filter(Boolean)
     )].sort((a, b) => (a > b ? -1 : 1));
-
-    const isJornalActive = location.pathname.startsWith('/jornal');
 
     return (
         <aside className="col sidebar hud-panel">
@@ -42,8 +43,14 @@ const Sidebar = ({ posts }) => {
             <nav>
                 <Link to="/" className="nav-item">/MAIN_SYSTEM</Link>
                 <div className="nav-group">
-                    <Link to="/jornal" className="nav-item">/JORNAL_DIÁRIO</Link>
-                    {(isJornalActive || location.pathname === '/') && uniqueDates.length > 0 && (
+                    <Link
+                        to="/jornal"
+                        className="nav-item"
+                        onClick={() => setJornalOpen(o => !o)}
+                    >
+                        /JORNAL_DIÁRIO {jornalOpen ? '▲' : '▼'}
+                    </Link>
+                    {jornalOpen && uniqueDates.length > 0 && (
                         <div className="submenu">
                             {uniqueDates.map(date => (
                                 <Link key={date} to={`/jornal/${date}`} className="submenu-item">
