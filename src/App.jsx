@@ -147,6 +147,21 @@ const PostViewer = ({ posts }) => {
     )
 }
 
+const SiteFooter = () => (
+    <footer className="site-footer">
+        <div className="footer-links">
+            <Link to="/post/sobre.md">/SOBRE</Link>
+            <span>|</span>
+            <Link to="/post/contato.md">/CONTATO</Link>
+            <span>|</span>
+            <Link to="/post/politica-de-privacidade.md">/POLÍTICA_DE_PRIVACIDADE</Link>
+        </div>
+        <div className="footer-copy">
+            © {new Date().getFullYear()} kiryubi.lab // END OF FILE
+        </div>
+    </footer>
+);
+
 function App() {
     const { posts, loading } = usePosts();
 
@@ -168,6 +183,7 @@ function App() {
                     <Route path="/post/:slug" element={<PostViewer posts={posts} />} />
                     <Route path="*" element={<div><h1>404</h1></div>} />
                 </Routes>
+                <SiteFooter />
             </main>
 
             <AdPanel />

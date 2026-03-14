@@ -552,3 +552,46 @@ nav {
     z-index: -1;
     pointer-events: none;
 }
+
+/* SITE FOOTER */
+.site-footer {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px dashed var(--hud-border);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.9rem;
+}
+
+.footer-links a {
+    color: var(--neon-cyan);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.footer-links a:hover {
+    opacity: 1;
+    text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.footer-links span {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+}
+
+.footer-copy {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
