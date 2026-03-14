@@ -2,7 +2,8 @@
     --bg-color: #030303;
     --text-primary: #e0ffee;
     /* Pale cyber green */
-    --text-dim: #005500;
+    --text-dim: #7a9e88;
+    /* Readable muted green-grey for descriptions */
 
     --neon-green: #00ff41;
     --neon-cyan: #00f3ff;
@@ -121,6 +122,11 @@ body {
 }
 
 /* SIDEBAR & LOGO */
+.ascii-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
 .logo-ascii {
     font-size: 8px;
     line-height: 8px;
@@ -334,7 +340,8 @@ nav {
 
 .card-excerpt {
     font-size: 0.85rem;
-    color: var(--text-dim);
+    color: #aac4b5;
+    /* Readable light muted green-grey */
     line-height: 1.6;
     flex-grow: 1;
     margin-bottom: 1.2rem;
@@ -394,16 +401,39 @@ nav {
     text-align: right;
 }
 
-.status-block {
-    border: 1px solid var(--danger-red);
-    background: rgba(255, 51, 51, 0.05);
-    padding: 10px;
-    margin-bottom: 15px;
-    clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+/* AD PANEL (Right Column) */
+.ad-panel-header {
+    color: var(--neon-cyan);
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    border-bottom: 1px solid var(--neon-cyan);
+    padding-bottom: 8px;
+    margin-bottom: 1.2rem;
+    opacity: 0.7;
 }
 
-.status-block pre {
-    color: var(--danger-red);
+.ad-slot {
+    border: 1px dashed rgba(0, 243, 255, 0.2);
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    background: rgba(0, 243, 255, 0.02);
+    min-height: 120px;
+}
+
+.ad-placeholder {
+    color: rgba(0, 243, 255, 0.4);
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.ad-placeholder-sub {
+    color: rgba(0, 243, 255, 0.25);
+    font-size: 0.75rem;
+    letter-spacing: 1px;
 }
 
 /* RESPONSIVE */
@@ -411,28 +441,65 @@ nav {
     .app-grid {
         grid-template-columns: 1fr;
         height: auto;
-        /* Release height constraint for native mobile scrolling */
         overflow: visible;
-        gap: 15px;
-        padding: 10px;
+        gap: 10px;
+        padding: 8px;
     }
 
     .hud-panel {
         height: auto;
-        /* Panels expand fully */
         max-height: none;
         overflow-y: visible;
-        /* Let the body scroll the page natively */
         clip-path: none;
+        border: 1px solid var(--hud-border);
+    }
+
+    /* Collapse sidebar into a compact nav bar on mobile */
+    .sidebar {
+        padding: 0.8rem;
+    }
+
+    .ascii-header {
+        display: none;
+        /* Hide the large ASCII logo on mobile */
+    }
+
+    nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .nav-item {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        letter-spacing: 1px;
+    }
+
+    .nav-item::before {
+        display: none;
+    }
+
+    .submenu {
+        display: none;
+        /* Hide submenus on mobile to save space */
     }
 
     .mobile-hidden {
         display: none;
     }
 
-    .hud-panel {
-        clip-path: none;
-        border: 1px solid var(--hud-border);
+    /* Card grid single column on mobile */
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .markdown-content {
+        padding: 0 0.5rem;
+    }
+
+    .markdown-content h1 {
+        font-size: 1.4rem;
     }
 }
 

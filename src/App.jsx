@@ -12,23 +12,14 @@ const toBRDate = (isoDate) => {
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
 };
 
-// Helper to filter posts for sidebar based on current route
-const getFilteredPosts = (allPosts, path) => {
-    if (path === '/games') return allPosts.filter(p => p.category === 'game');
-    if (path.startsWith('/jornal')) return allPosts.filter(p => p.category === 'noticia');
-    if (path === '/ciencia') return allPosts.filter(p => p.category === 'science' || p.category === 'log' || p.category === 'unknown');
-    return allPosts;
-};
-
 const Sidebar = ({ posts }) => {
     const location = useLocation();
-    const filteredPosts = getFilteredPosts(posts, location.pathname);
 
     // Get unique sorted dates from 'noticia' posts for the Jornal submenu
     const noticiasPosts = posts.filter(p => p.category === 'noticia');
     const uniqueDates = [...new Set(
         noticiasPosts.map(p => p.date ? p.date.substring(0, 10) : null).filter(Boolean)
-    )].sort((a, b) => (a > b ? -1 : 1)); // Descending
+    )].sort((a, b) => (a > b ? -1 : 1));
 
     const isJornalActive = location.pathname.startsWith('/jornal');
 
@@ -65,38 +56,21 @@ const Sidebar = ({ posts }) => {
                 <Link to="/games" className="nav-item">/GAMES</Link>
                 <Link to="/ciencia" className="nav-item">/CIENCIA</Link>
             </nav>
-            <div className="post-list">
-                <div className="list-header">
-                    {location.pathname === '/' ? 'ALL_FILES:' :
-                        location.pathname.toUpperCase().substring(1).replace(/\//g, '_') + '_FILES:'}
-                </div>
-                {filteredPosts.length > 0 ? filteredPosts.map(p => (
-                    <Link key={p.slug} to={`/post/${p.slug}`} className="post-item">
-                        <span className="date">[{toBRDate(p.date)}]</span>
-                        <span className="title" title={p.title}>
-                            {p.title && p.title.length > 22 ? `${p.title.substring(0, 22)}...` : p.title}
-                        </span>
-                    </Link>
-                )) : <div style={{ opacity: 0.5 }}>{'<NO_DATA>'}</div>}
-            </div>
         </aside>
     )
 };
 
-const Related = () => (
+// Right panel: Ad space
+const AdPanel = () => (
     <aside className="col related mobile-hidden hud-panel">
-        <div className="status-block">
-            <pre>
-                mem_usage: {Math.floor(Math.random() * 40)}%
-                uptime:    999h
-            </pre>
+        <div className="ad-panel-header">[ ANÚNCIOS ]</div>
+        <div className="ad-slot">
+            <span className="ad-placeholder">AD_SPACE_01</span>
+            <span className="ad-placeholder-sub">728×90 / 300×250</span>
         </div>
-        <div>
-            <span>[links]</span>
-            <ul>
-                <li>{'>'} github</li>
-                <li>{'>'} twitter</li>
-            </ul>
+        <div className="ad-slot" style={{ marginTop: '1rem' }}>
+            <span className="ad-placeholder">AD_SPACE_02</span>
+            <span className="ad-placeholder-sub">300×600</span>
         </div>
     </aside>
 )
@@ -124,7 +98,7 @@ const PostCardGrid = ({ posts, header }) => (
 
 // Day View: cards for all posts on a specific date
 const JornalDayView = ({ posts }) => {
-    const { date } = useParams(); // YYYY-MM-DD from URL
+    const { date } = useParams();
     const dayPosts = posts
         .filter(p => p.category === 'noticia' && p.date && p.date.substring(0, 10) === date)
         .sort((a, b) => a.title > b.title ? 1 : -1);
@@ -137,7 +111,7 @@ const JornalDayView = ({ posts }) => {
     );
 };
 
-// General Category List View (for /jornal index, /games, /ciencia)
+// General Category List View
 const CategoryView = ({ posts, category }) => {
     const filtered = posts.filter(p => {
         if (category === 'science') return p.category === 'science' || p.category === 'log' || p.category === 'unknown';
@@ -145,9 +119,7 @@ const CategoryView = ({ posts, category }) => {
         return p.category === category;
     });
 
-    // For jornal, group by date and show latest date's posts by default
     const header = category === 'jornal' ? '/INDEX: JORNAL DIÁRIO' : `/INDEX: ${category.toUpperCase()}`;
-
     return <PostCardGrid posts={filtered} header={header} />;
 };
 
@@ -191,7 +163,7 @@ function App() {
                 </Routes>
             </main>
 
-            <Related />
+            <AdPanel />
         </div>
     )
 }
