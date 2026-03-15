@@ -1,5 +1,5 @@
 ---
-title: games
+category: "game"
 ---
 ##  Conceito
 Um jogo de simulação onde o jogador experimenta o mundo **através da percepção real de diferentes animais**.  
