@@ -1,5 +1,6 @@
-# Games
-
+---
+title: games
+---
 ##  Conceito
 Um jogo de simulação onde o jogador experimenta o mundo **através da percepção real de diferentes animais**.  
 Em vez de controlar um personagem humano, o jogador assume o papel de um animal e vivencia o ambiente exatamente como ele perceberia na natureza.
