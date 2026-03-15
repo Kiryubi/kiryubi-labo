@@ -95,7 +95,9 @@ const PostCardGrid = ({ posts, header }) => (
                         </div>
                         <h2 className="card-title">{p.title}</h2>
                         <p className="card-excerpt">{p.excerpt}</p>
-                        <span className="card-link">Ler notícia completa →</span>
+                        <span className="card-link">
+                            {p.category === 'noticia' ? 'Ler notícia completa →' : 'Ler Tudo →'}
+                        </span>
                     </Link>
                 ))}
             </div>
